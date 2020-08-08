@@ -1,5 +1,7 @@
 var canvas = document.getElementById("canvas");
 var ctx = canvas.getContext("2d");
+var canvas2 = document.getElementById("canvas2");
+var ctx2 = canvas2.getContext("2d");
 
 var sprite = document.getElementById("sprite");
 
@@ -24,6 +26,8 @@ setInterval(function () {
 
 //setup function
 function setup() {
+    box = new Box(100, 100, 70, 70);
+    box.draw();
     player1 = new Player(0, 0, mario);
     player1.draw();
 }
@@ -55,34 +59,36 @@ setup();
 
 //frame
 function frame() {
-    //FPS
-    if(sec!=currentSecond)
-	{
-		currentSecond = sec;
-		framesLastSecond = frameCount;
-		frameCount = 1;
-	}
-    else { frameCount++; }
-    ctx.fillStyle = "#ff0000";
-	ctx.fillText("FPS: " + framesLastSecond, 10, 20);
-
-    controls1();
-    controls2();
+    controls();
+    
+    ctx.clearRect(0, 0, 123123, 123123);
+    ctx2.clearRect(0, 0, 123123, 123123);
     player1.draw();
     player1.update();
     if(twoPlayer) {
         player2.draw();
         player2.update();
     }
-    console.log("player1:");
-    console.log(player1.x + "," + player1.y);
-    console.log(player1.vector);
-    console.log(player1.direction);
-    if(twoPlayer) {
-        console.log("player2:");
-        console.log(player2.x + "," + player2.y);
-        console.log(player2.vector);
-        console.log(player2.direction);
+
+    //debug canvas
+    ctx2.fillStyle = "#ff0000";
+    ctx2.fillText("FPS: " + dt*1000, 10, 20);
+
+    ctx2.fillText("Player1 pos: " + Number(player1.x).toFixed(2) + ", " + Number(player1.y).toFixed(2), 10, 30);
+    ctx2.fillText("hitbox test: " + player1.hitbox[2] > box.hitbox[3], 10, 40);
+    ctx2.fillText("Player1 hitbox l: " + Number(player1.hitbox[0]).toFixed(2), 10, 50);
+    ctx2.fillText("Player1 hitbox r: " + Number(player1.hitbox[1]).toFixed(2), 10, 60);
+    ctx2.fillText("Player1 hitbox t: " + Number(player1.hitbox[2]).toFixed(2), 10, 70);
+    ctx2.fillText("Player1 hitbox b: " + Number(player1.hitbox[3]).toFixed(2), 10, 80);
+    ctx2.fillText("box hitbox: " + box.hitbox, 10, 90);
+
+
+    box.draw();
+
+    sqrCollision(player1, box);
+    
+    if(box.collision){
+        console.exception('colision');
     }
     requestAnimationFrame(frame);
 }

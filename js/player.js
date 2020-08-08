@@ -23,9 +23,10 @@ class Player {
         this.isDucking = false;
         this.direction = 0;
 
+        this.collision = false;
+
         this.draw = function () {
             this.frameCount++;
-            ctx.clearRect(0, 0, 999999, 9999999999);
             if (this.direction == 1) {
                 this.dirOffset = 32;
             } else {
@@ -48,14 +49,12 @@ class Player {
                 this.curFrame = 0;
             }
             if (sprite == null) {
-                console.error("player sprite is null");
+                console.exception("player sprite is null");
             }
         }
         this.update = function () {
-            controls1();
-            if (twoPlayer) {
-                controls2();
-            }
+            controls();
+            this.hitbox = [this.x, this.x + this.w, this.y, this.y + this.h];
             this.move();
             //collison();
         }
