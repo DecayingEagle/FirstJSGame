@@ -26,8 +26,10 @@ setInterval(function () {
 
 //setup function
 function setup() {
-    box = new Box(100, 100, 70, 70);
-    box.draw();
+    box1 = new Box(100, 100, 70, 70);
+    box1.draw();
+    box2 = new Box(50, 50, 70, 70);
+    box2.draw();
     player1 = new Player(0, 0, mario);
     player1.draw();
 }
@@ -75,20 +77,24 @@ function frame() {
     ctx2.fillText("FPS: " + dt*1000, 10, 20);
 
     ctx2.fillText("Player1 pos: " + Number(player1.x).toFixed(2) + ", " + Number(player1.y).toFixed(2), 10, 30);
-    ctx2.fillText("hitbox test: " + player1.hitbox[2] > box.hitbox[3], 10, 40);
+    ctx2.fillText("hitbox test: " + player1.hitbox[2] > box1.hitbox[3], 10, 40);
     ctx2.fillText("Player1 hitbox l: " + Number(player1.hitbox[0]).toFixed(2), 10, 50);
     ctx2.fillText("Player1 hitbox r: " + Number(player1.hitbox[1]).toFixed(2), 10, 60);
     ctx2.fillText("Player1 hitbox t: " + Number(player1.hitbox[2]).toFixed(2), 10, 70);
     ctx2.fillText("Player1 hitbox b: " + Number(player1.hitbox[3]).toFixed(2), 10, 80);
-    ctx2.fillText("box hitbox: " + box.hitbox, 10, 90);
+    ctx2.fillText("box hitbox: " + box1.hitbox, 10, 90);
 
 
-    box.draw();
+    box1.draw();
+    box2.draw();
 
-    sqrCollision(player1, box);
-    
-    if(box.collision){
-        console.exception('colision');
+    rectCollision(player1, box1);
+    rectCollision(player1, box2);
+    if(twoPlayer) {
+        rectCollision(player1, box1);
+        rectCollision(player2, box1);
+        rectCollision(player1, box2);
+        rectCollision(player2, box2);
     }
     requestAnimationFrame(frame);
 }

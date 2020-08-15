@@ -19,7 +19,6 @@ var controls = function() {
                 break;
 
             //player2
-
             case 83:
                 //down
                 player2.vector[0] = -1;
@@ -58,7 +57,6 @@ var controls = function() {
                 break;
 
             //player2
-
             case 83:
                 //down
                 player2.vector[0] = 0;

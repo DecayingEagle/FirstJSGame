@@ -4,7 +4,8 @@ var acceleration,
 
 var gravity = 1;
 
-var sqrCollision = function (obj, obj2) {
+//colision for rectangles
+function rectCollision (obj, obj2) {
     if(obj.hitbox[2] > obj2.hitbox[3] || obj.hitbox[1] < obj2.hitbox[0] || obj.hitbox[3] < obj2.hitbox[2] || obj.hitbox[0] > obj2.hitbox[1]) {
         obj.collision = false;
         obj2.collision = false;
