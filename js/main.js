@@ -17,6 +17,8 @@ var sec = Math.floor(Date.now()/1000);
 var currentSecond,
     frameCount;
 
+var entity = [];
+
 //delta time get
 setInterval(function () {
     dt = (new Date().getTime() - lastFrameTimeStamp) / 1000;
@@ -26,8 +28,11 @@ setInterval(function () {
 
 //setup function
 function setup() {
-    box = new Box(100, 100, 70, 70);
-    box.draw();
+    
+    entity[0] = new Box(100, 100, 70, 70);
+    for (let i = 0; i < entity.length; i++) {
+        entity[i].draw;
+    }
     player1 = new Player(0, 0, mario);
     player1.draw();
 }
@@ -75,20 +80,33 @@ function frame() {
     ctx2.fillText("FPS: " + dt*1000, 10, 20);
 
     ctx2.fillText("Player1 pos: " + Number(player1.x).toFixed(2) + ", " + Number(player1.y).toFixed(2), 10, 30);
-    ctx2.fillText("hitbox test: " + player1.hitbox[2] > box.hitbox[3], 10, 40);
     ctx2.fillText("Player1 hitbox l: " + Number(player1.hitbox[0]).toFixed(2), 10, 50);
     ctx2.fillText("Player1 hitbox r: " + Number(player1.hitbox[1]).toFixed(2), 10, 60);
     ctx2.fillText("Player1 hitbox t: " + Number(player1.hitbox[2]).toFixed(2), 10, 70);
     ctx2.fillText("Player1 hitbox b: " + Number(player1.hitbox[3]).toFixed(2), 10, 80);
-    ctx2.fillText("box hitbox: " + box.hitbox, 10, 90);
 
+    entity[0].draw;
 
-    box.draw();
-
-    sqrCollision(player1, box);
-    
-    if(box.collision){
-        console.exception('colision');
+    //collision detection for every entity
+    for (let i = 0; i < entity.length; i++) {
+        if(sqrCollision(player1, entity[i])){
+            player1.collision = true;
+            entity.collision = true;
+        } else {
+            player1.collision = false;
+            entity.collision = false;
+        }
+        
+        if(sqrCollision(player2, entity[i])){
+            player2.collision = true;
+            entity.collision = true;
+        } else {
+            player2.collision = false;
+            entity.collision = false;
+        }
+        //player1.collision = sqrCollision(player1, entity[i])
+        //player2.collision = sqrCollision(player2, entity[i])
+        console.log('entity[i].hitbox :>> ', entity[i].hitbox);
     }
     requestAnimationFrame(frame);
 }

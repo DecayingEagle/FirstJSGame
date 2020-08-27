@@ -21,5 +21,3 @@ class Box {
     }
     method() {}
 }
-
-//lol
