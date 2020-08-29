@@ -9,7 +9,10 @@ class Player {
         this.mass = 10;
         this.terminalVel = 30;
         this.sprite = sprite;
-        this.vector = [0, 0]
+        this.vector = [0, 0];
+
+        this.vx = 0;
+        this.vy = 0;
 
         this.frame = [16, 32, 48];
         this.curFrame = 0;
@@ -62,26 +65,41 @@ class Player {
 
         this.move = function () {
             if (this.vector[0] == 1) {
-                this.y -= updatePos(2, 1000, this.mass);
+                this.vy = updatePos(2, 1000, this.mass, 30)*2;
+            } else if (this.vector[1] == -1) {
+                this.vx = updatePos(10, 1, this.mass, 70);
+            } else if (this.vector[1] == 1) {
+                this.vx = updatePos(10, 1, this.mass, 70);
+            }
+            this.vy = updatePos(1, 1, this.mass, 30);
+            
+        }
+
+        this.updateMove = function () {
+            if (this.vector[0] == 1) {
+                this.y -= this.vy;
                 this.isJumping = true;
                 this.isWalking = false;
             } else if (this.vector[1] == -1) {
                 this.direction = 1;
-                this.x -= updatePos(10, 1, this.mass);
+                this.x -= this.vx;
                 this.isWalking = true;
+                this.y += this.vy;
             } else if (this.vector[1] == 1) {
                 this.direction = 0;
-                this.x += updatePos(10, 1, this.mass);
+                this.x += this.vx;
                 this.isWalking = true;
+                this.y += this.vy;
             } else if (this.vector[0] == -1) {
                 this.isDucking = true;
+                this.y += this.vy;
             } else {
                 this.isDucking = false;
                 this.isWalking = false;
                 this.isJumping = false;
+                this.y += this.vy;
             }
-            this.y += updatePos(1, 1, this.mass, 30);
-
+           
         }
     }
     method() {}

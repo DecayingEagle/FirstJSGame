@@ -13,7 +13,7 @@ var twoPlayer = false;
 var player1,
     player2;
 
-var sec = Math.floor(Date.now()/1000);
+var sec = Math.floor(Date.now() / 1000);
 var currentSecond,
     frameCount;
 
@@ -28,11 +28,9 @@ setInterval(function () {
 
 //setup function
 function setup() {
-    
+    entity[1] = new Circle(200, 200, 10);
     entity[0] = new Box(100, 100, 70, 70);
-    for (let i = 0; i < entity.length; i++) {
-        entity[i].draw;
-    }
+
     player1 = new Player(0, 0, mario);
     player1.draw();
 }
@@ -65,48 +63,54 @@ setup();
 //frame
 function frame() {
     controls();
-    
+    for (let i = 0; i < entity.length; i++) {
+        entity[i].draw;
+    }
     ctx.clearRect(0, 0, 123123, 123123);
     ctx2.clearRect(0, 0, 123123, 123123);
     player1.draw();
     player1.update();
-    if(twoPlayer) {
+    if (twoPlayer) {
         player2.draw();
         player2.update();
     }
 
     //debug canvas
     ctx2.fillStyle = "#ff0000";
-    ctx2.fillText("FPS: " + dt*1000, 10, 20);
+    
+    ctx2.fillText("FPS: " + Number(dt * 60 * 60).toFixed(0), 10, 20);
 
     ctx2.fillText("Player1 pos: " + Number(player1.x).toFixed(2) + ", " + Number(player1.y).toFixed(2), 10, 30);
     ctx2.fillText("Player1 hitbox l: " + Number(player1.hitbox[0]).toFixed(2), 10, 50);
     ctx2.fillText("Player1 hitbox r: " + Number(player1.hitbox[1]).toFixed(2), 10, 60);
     ctx2.fillText("Player1 hitbox t: " + Number(player1.hitbox[2]).toFixed(2), 10, 70);
     ctx2.fillText("Player1 hitbox b: " + Number(player1.hitbox[3]).toFixed(2), 10, 80);
-
-    entity[0].draw;
+    ctx2.fillText("Player1 vx: " + Number(player1.vx).toFixed(2), 10, 90);
+    ctx2.fillText("Player1 vy: " + Number(player1.vy).toFixed(2), 10, 100);
 
     //collision detection for every entity
     for (let i = 0; i < entity.length; i++) {
-        if(sqrCollision(player1, entity[i])){
+        if (sqrCollision(player1, entity[i])) {
             player1.collision = true;
-            entity.collision = true;
+            entity[i].collision = true;
         } else {
             player1.collision = false;
-            entity.collision = false;
+            entity[i].collision = false;
         }
-        
-        if(sqrCollision(player2, entity[i])){
-            player2.collision = true;
-            entity.collision = true;
-        } else {
-            player2.collision = false;
-            entity.collision = false;
+        if (twoPlayer) {
+            if (sqrCollision(player2, entity[i])) {
+                player2.collision = true;
+                entity[i].collision = true;
+            } else {
+                player2.collision = false;
+                entity[i].collision = false;
+            }
         }
-        //player1.collision = sqrCollision(player1, entity[i])
-        //player2.collision = sqrCollision(player2, entity[i])
-        console.log('entity[i].hitbox :>> ', entity[i].hitbox);
+    }
+
+    player1.updateMove();
+    if (twoPlayer) {
+        player2.updateMove();
     }
     requestAnimationFrame(frame);
 }
